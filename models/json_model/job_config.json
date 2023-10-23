@@ -1,0 +1,42 @@
+{
+    "microk8s": {
+        "command": "microk8s",
+        "type": "kubectl",
+        "folder_location": "/home/bot/ems/db/k8s_files",
+        "restart": false,
+        "start": true,
+        "stop": false
+    },
+    "actions": [
+        {
+            "order": 1,
+            "restart": false,
+            "flag": "-f",
+            "file_name": "pv-mysql.yml"
+        },
+        {
+            "order": 2,
+            "restart": false,
+            "flag": "-f",
+            "file_name": "pvc-mysql.yml"
+        },
+        {
+            "order": 3,
+            "restart": true,
+            "flag": "-f",
+            "file_name": "mysql-config.yml"
+        },
+        {
+            "order": 4,
+            "restart": true,
+            "flag": "-f",
+            "file_name": "deploy.yml"
+        },
+        {
+            "order": 5,
+            "restart": true,
+            "flag": "-f",
+            "file_name": "tcp-service-config.yml"
+        }
+    ]
+}
