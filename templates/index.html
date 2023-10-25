@@ -15,7 +15,7 @@
         <thead>
           <tr>
             <th >Status</th>
-            <th>Pipeline</th>
+            <th>Project</th>
             <th>Trigger</th>
             <th>Commit</th>
             <th>Stages</th>
@@ -53,7 +53,7 @@
                     {% endif %}
                 </td>
                 <td>
-                  {{item.PipelineId}}
+                  {{item.Project}}
                 </td>
                 <td>
                   {{item.Trigger}}
@@ -87,16 +87,16 @@
                 </td>
                 <td>
                   <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <button type="button" class="btn btn-outline-secondary" onclick="callProcess({{item.ProjectId}})" data-bs-toggle="tooltip" data-bs-placement="right" title="Run">
+                    <button type="button" class="btn btn-outline-secondary" onclick="callProcess({{item}})" data-bs-toggle="tooltip" data-bs-placement="right" title="Run">
                       <i class="fa fa-play"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="callProcess({{item.ProjectId}})" data-bs-toggle="tooltip" data-bs-placement="right" title="View Code">
+                    <button type="button" class="btn btn-outline-secondary" onclick="callProcess({{item}})" data-bs-toggle="tooltip" data-bs-placement="right" title="View Code">
                       <i class="fa fa-cloud-download"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="callProcess({{item.ProjectId}})" data-bs-toggle="tooltip" data-bs-placement="right" title="Re-Run">
+                    <button type="button" class="btn btn-outline-secondary" onclick="callProcess({{item}})" data-bs-toggle="tooltip" data-bs-placement="right" title="Re-Run">
                       <i class="fa fa-repeat"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-danger" onclick="callProcess({{item.ProjectId}})" data-bs-toggle="tooltip" data-bs-placement="right" title="Stop">
+                    <button type="button" class="btn btn-outline-danger" onclick="callProcess({{item}})" data-bs-toggle="tooltip" data-bs-placement="right" title="Stop">
                       <i class="fa fa-close"></i>
                     </button>
                   </div>
@@ -108,9 +108,13 @@
     </div>
 </body>
 <script type="text/javascript">
-    var baseUrl = "http://localhost:8080/"
-    function callProcess(id) {
-        const url = baseUrl + "service/" + id;
+    // var baseUrl = "http://localhost:8080/"
+    var baseUrl = "http://k8manager.io/"
+    function callProcess(item) {
+        if (item == null || item == undefined)
+          console.log("Fail to start the job");
+
+        const url = baseUrl + "service/" + item.ProjectId;
         const requestData = {
             "application_name": "ems",
             "delay": 0,

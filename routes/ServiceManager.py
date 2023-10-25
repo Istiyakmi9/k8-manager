@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 
 from enum import IntEnum
 from models.request_model import RequestModel
+from service.job_service import JobStarter
 
 route = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -37,7 +38,8 @@ async def get(request: Request):
     pipelines = [{
         "Status": int(Status.Running),
         "PipelineId": "#123456789",
-        "Trigger": "Developer",
+        "Project": "Mysql Service",
+        "Trigger": "restart",
         "Commit": "Message",
         "Stages": 1,
         "UpdatedOn": date.today(),
@@ -46,7 +48,8 @@ async def get(request: Request):
     }, {
         "Status": int(Status.Failed),
         "PipelineId": "#123456789",
-        "Trigger": "Developer",
+        "Project": "EMS Server",
+        "Trigger": "none",
         "Commit": "Message",
         "Stages": 2,
         "UpdatedOn": date.today(),
@@ -55,7 +58,8 @@ async def get(request: Request):
     }, {
         "Status": int(Status.Passed),
         "PipelineId": "#123456789",
-        "Trigger": "Developer",
+        "Project": "EMS UI",
+        "Trigger": "none",
         "Commit": "Message",
         "Stages": 3,
         "UpdatedOn": date.today(),
@@ -64,7 +68,8 @@ async def get(request: Request):
     }, {
         "Status": int(Status.Running),
         "PipelineId": "#123456789",
-        "Trigger": "Developer",
+        "Project": "BottomHalf Site",
+        "Trigger": "none",
         "Commit": "Message",
         "Stages": 4,
         "UpdatedOn": date.today(),
@@ -73,7 +78,8 @@ async def get(request: Request):
     }, {
         "Status": int(Status.Running),
         "PipelineId": "#123456789",
-        "Trigger": "Developer",
+        "Project": "New Project",
+        "Trigger": "none",
         "Commit": "Message",
         "Stages": 1,
         "UpdatedOn": date.today(),
@@ -82,7 +88,8 @@ async def get(request: Request):
     }, {
         "Status": int(Status.Warning),
         "PipelineId": "#123456789",
-        "Trigger": "Developer",
+        "Project": "New Project 2",
+        "Trigger": "none",
         "Commit": "Message",
         "Stages": 4,
         "UpdatedOn": date.today(),
@@ -95,6 +102,6 @@ async def get(request: Request):
 
 @route.put("/service/{id}")
 def start_service(id: int, request_data: RequestModel) -> Response:
-    print(id)
-    print(request_data)
+    job = JobStarter()
+    job.run_service(request_data)
     return JSONResponse(content={"message": "hello"})

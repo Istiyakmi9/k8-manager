@@ -1,4 +1,5 @@
 import subprocess
+from models.request_model import RequestModel
 import pandas as pd
 import json
 
@@ -17,7 +18,7 @@ class JobStarter:
         print("Inside the jobstarter")
         self.microk8sJob = RunMicrok8sJob()
 
-    def read_json_from_file(self):
+    def run_service(self, requestModel: RequestModel):
         # with open("config.json", "r") as file:
         #    json_data = json.load(file)
 
@@ -27,7 +28,22 @@ class JobStarter:
         # _config = config(**json.loads(df.to_json()))
 
         mdf = pd.read_json("models/json_model/job_config.json", typ='series')
-        job_data = job_configuration.from_json(mdf.to_json())
+        job_data: job_configuration = job_configuration.from_json(mdf.to_json())
+
+        print(f"Trigged for: {requestModel.Trigger}")
+        match requestModel.Trigger:
+            case "restart":
+                job_data.microk8s.restart = True
+                job_data.microk8s.start = False
+                job_data.microk8s.stop = False
+            case "start":
+                job_data.microk8s.restart = False
+                job_data.microk8s.start = True
+                job_data.microk8s.stop = False
+            case "stop":
+                job_data.microk8s.restart = False
+                job_data.microk8s.start = False
+                job_data.microk8s.stop = True
 
         if job_data == None:
             raise ValueError("Fail to convert data into commands")
@@ -98,8 +114,3 @@ class RunMicrok8sJob:
         except subprocess.CalledProcessError as e:
             print(f"Error {e}")
             command_output = ''
-
-
-if __name__ == "__main__":
-    jobStarter = JobStarter()
-    jobStarter.read_json_from_file()

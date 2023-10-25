@@ -1,11 +1,12 @@
 import json
+from typing import List
 
 class microk8s_actions:
     def __init__(self, order, restart_flag, flag, file_name):
-        self.order = order
-        self.restart = restart_flag
-        self.flag = flag
-        self.file_name = file_name
+        self.order: int = order
+        self.restart: bool = restart_flag
+        self.flag: bool = flag
+        self.file_name: str = file_name
         pass
 
 
@@ -22,11 +23,11 @@ class microk8s_command:
 
 class job_configuration:
     def __init__(self):
-        self.microk8s = None
-        self.actions = []
+        self.microk8s: microk8s_command
+        self.actions: List[microk8s_actions] = []
 
     @classmethod
-    def from_json(self, json_str):
+    def from_json(cls, json_str):
         json_data = json.loads(json_str)
         k8s_cmd = json_data["microk8s"]
         cmd = microk8s_command(
