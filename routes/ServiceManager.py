@@ -33,8 +33,8 @@ async def student_data(s1: Student):
     return s1
 
 
-@route.get("/", response_class=HTMLResponse)
-async def get(request: Request):
+@route.get("/api", response_class=HTMLResponse)
+async def get(request: Request) -> Response:
     pipelines = [{
         "Status": int(Status.Running),
         "PipelineId": "#123456789",
@@ -97,10 +97,10 @@ async def get(request: Request):
         "ProjectId": 6
     }]
 
-    return templates.TemplateResponse("index.html", {"request": request, "pipelines": pipelines})
+    return JSONResponse(content={"Result": pipelines})
 
 
-@route.put("/service/{id}")
+@route.put("/api/service/{id}")
 def start_service(id: int, request_data: RequestModel) -> Response:
     job = JobStarter()
     job.run_service(request_data)
