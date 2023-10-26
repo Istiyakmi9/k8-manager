@@ -41,18 +41,12 @@ jobs:
     - name: Login to Docker Hub
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      env:
-        DOCKER_CLI_ACI=1
 
     - name: Build Docker Image
       run: |
         docker build -t istiyaqmi9/k8-manager:latest .
       working-directory: .
-      env:
-        DOCKER_CLI_ACI=1
-
+      
     - name: Push Docker Image
       run: |
         docker push istiyaqmi9/k8-manager:latest
-      env:
-        DOCKER_CLI_ACI=1
