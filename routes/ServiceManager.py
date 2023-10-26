@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Request, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from typing import List
+from typing import List, Dict
 from pydantic import BaseModel, Field
 from datetime import date
+import json
 
 from fastapi.responses import JSONResponse
 
@@ -33,8 +34,8 @@ async def student_data(s1: Student):
     return s1
 
 
-@route.get("/api", response_class=HTMLResponse)
-async def get(request: Request) -> Response:
+@route.get("/api")
+async def get(request: Request) -> list[dict]:
     pipelines = [{
         "Status": int(Status.Running),
         "PipelineId": "#123456789",
@@ -97,7 +98,7 @@ async def get(request: Request) -> Response:
         "ProjectId": 6
     }]
 
-    return JSONResponse(content={"Result": pipelines})
+    return pipelines
 
 
 @route.put("/api/service/{id}")
